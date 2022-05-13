@@ -36,13 +36,6 @@ void Scene_Main::initScene()
 	prog.setUniform("PctExtend", 0.1f);
 	prog.setUniform("LineColor", vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	vec3 color = vec3(0.2f, 0.5f, 0.9f);
-	prog.setUniform("Material.Kd", color * 0.6f);
-	prog.setUniform("Material.Ka", color);
-
-	prog.setUniform("Material.Ks", 0.2f, 0.2f, 0.2f);
-	prog.setUniform("Material.Shininess", 100.0f);
-
 	prog.setUniform("Light.Position", vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	prog.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
 }
@@ -69,6 +62,10 @@ void Scene_Main::update( float t, UIHandler& uiHandler)
 	prog.setUniform("Freq", uiHandler.GetFrequency());
 	prog.setUniform("Velocity", uiHandler.GetVelocity());
 	prog.setUniform("Amp", uiHandler.GetAmplitude());
+
+	vec3 color = uiHandler.GetWaveColor();
+	prog.setUniform("Material.Kd", color * 0.6f);
+	prog.setUniform("Material.Ka", color);
 }
 
 void Scene_Main::render()
