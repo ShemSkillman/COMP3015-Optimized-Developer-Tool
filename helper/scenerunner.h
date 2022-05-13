@@ -3,13 +3,14 @@
 #include <GLFW/glfw3.h>
 #include "glutils.h"
 
-#define WIN_WIDTH 800
-#define WIN_HEIGHT 600
+#define WIN_WIDTH 1280
+#define WIN_HEIGHT 720
 
 #include <map>
 #include <string>
 #include <fstream>
 #include <iostream>
+#include "../UIHandler.h"
 
 class SceneRunner {
 private:
@@ -117,11 +118,16 @@ private:
     }
 
     void mainLoop(GLFWwindow * window, Scene & scene) {
+        UIHandler uiHandler(window);
+
         while( ! glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE) ) {
             GLUtils::checkForOpenGLError(__FILE__,__LINE__);
 			
             scene.update(float(glfwGetTime()));
             scene.render();
+
+            uiHandler.Poll();
+
             glfwSwapBuffers(window);
 
             glfwPollEvents();

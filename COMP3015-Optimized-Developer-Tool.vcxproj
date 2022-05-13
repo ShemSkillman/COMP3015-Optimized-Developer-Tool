@@ -72,22 +72,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)helper;$(SolutionDir)Dependencies\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)imgui\include;$(SolutionDir)helper;$(SolutionDir)Dependencies\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)helper;$(SolutionDir)Dependencies\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)imgui\include;$(SolutionDir)helper;$(SolutionDir)Dependencies\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)helper;$(SolutionDir)Dependencies\include;C:\Dependencies\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)imgui\include;$(SolutionDir)helper;$(SolutionDir)Dependencies\include;C:\Dependencies\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\lib;C:\Dependencies\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)helper;$(SolutionDir)Dependencies\include;C:\Dependencies\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)imgui\include;$(SolutionDir)helper;$(SolutionDir)Dependencies\include;C:\Dependencies\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\lib;C:\Dependencies\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -163,8 +163,15 @@
     <ClCompile Include="helper\texture.cpp" />
     <ClCompile Include="helper\torus.cpp" />
     <ClCompile Include="helper\trianglemesh.cpp" />
+    <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\imgui_draw.cpp" />
+    <ClCompile Include="imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="imgui\imgui_tables.cpp" />
+    <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="scene_main.cpp" />
+    <ClCompile Include="UIHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\wave_anim_shader.frag" />
@@ -193,7 +200,17 @@
     <ClInclude Include="helper\torus.h" />
     <ClInclude Include="helper\trianglemesh.h" />
     <ClInclude Include="helper\utils.h" />
+    <ClInclude Include="imgui\include\imconfig.h" />
+    <ClInclude Include="imgui\include\imgui.h" />
+    <ClInclude Include="imgui\include\imgui_impl_glfw.h" />
+    <ClInclude Include="imgui\include\imgui_impl_opengl3.h" />
+    <ClInclude Include="imgui\include\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="imgui\include\imgui_internal.h" />
+    <ClInclude Include="imgui\include\imstb_rectpack.h" />
+    <ClInclude Include="imgui\include\imstb_textedit.h" />
+    <ClInclude Include="imgui\include\imstb_truetype.h" />
     <ClInclude Include="scene_main.h" />
+    <ClInclude Include="UIHandler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
