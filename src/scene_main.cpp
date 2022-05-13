@@ -18,7 +18,7 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
-Scene_Main::Scene_Main() : time(0), plane(20.0f, 20.0f, 200, 2) {}
+Scene_Main::Scene_Main() : time(0), plane(20.0f, 20.0f, 200, 200) {}
 
 void Scene_Main::initScene()
 {
@@ -59,17 +59,15 @@ void Scene_Main::render()
 	prog.setUniform("Time", time);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	view = glm::lookAt(vec3(10.0f * cos(angle), 4.0f, 10.0f * sin(angle)),
+	view = glm::lookAt(vec3(10, 10.0f, 10),
 		vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
 	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f, 100.0f);
 
-	prog.setUniform("Material.Kd", 0.2f, 0.5f, 0.9f);
-	prog.setUniform("Material.Ks", 0.2f, 0.2f, 0.2f);
+	prog.setUniform("Material.Kd", 0.2f * 0.3f, 0.5f * 0.3f, 0.9f * 0.3f);
+	prog.setUniform("Material.Ks", 0.0f, 0.0f, 0.0f);
 	prog.setUniform("Material.Ka", 0.2f, 0.5f, 0.9f);
 	prog.setUniform("Material.Shininess", 100.0f);
 	model = mat4(1.0f);
-	model = glm::rotate(model, glm::radians(-10.0f), vec3(0.0f, 0.0f, 1.0f));
-	model = glm::rotate(model, glm::radians(50.0f), vec3(1.0f, 0.0f, 0.0f));
 	setMatrices();
 	plane.render();
 }

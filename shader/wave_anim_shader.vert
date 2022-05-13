@@ -25,11 +25,13 @@ void main()
 
 	// Translate vertices on y coords
 	float u = Freq * pos.x - Velocity * Time;
-	pos.y = Amp * sin(u);
+	float i = Freq * pos.z - Velocity * Time;
+
+	pos.y = Amp * sin(u) + Amp * sin(i);
 
 	// Compute the normal vector
 	vec3 n = vec3(0.0);
-	n.xy = normalize(vec2(cos(u), 1.0));
+	n.xyz = normalize(vec3(cos(u), 1.0, sin(i)));
 
 	// Pass values to the fragment shader
 	Position = ModelViewMatrix * pos;
