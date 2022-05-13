@@ -18,7 +18,9 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
-Scene_Main::Scene_Main() : time(0), plane(20.0f, 20.0f, 200, 200) {}
+Scene_Main::Scene_Main() : time(0), plane(20.0f, 20.0f, 200, 200) {
+	ogre = ObjMesh::loadWithAdjacency("media/bs_ears.obj");
+}
 
 void Scene_Main::initScene()
 {
@@ -27,9 +29,21 @@ void Scene_Main::initScene()
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glEnable(GL_DEPTH_TEST);
 
-    prog.setUniform("Light.Intensity", vec3(1.0f, 1.0f, 1.0f));
-    prog.setUniform("Light.Position", vec4(0.0f, 0.0f, 0.0f, 1.0f));
-    angle = glm::half_pi<float>();
+	view = glm::lookAt(vec3(1.0f),
+		vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+
+	prog.setUniform("EdgeWidth", 0.005f);
+	prog.setUniform("PctExtend", 0.25f);
+	prog.setUniform("LineColor", vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+	prog.setUniform("Material.Kd", 0.7f, 0.5f, 0.2f);
+	prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
+
+	prog.setUniform("Material.Ks", 0.2f, 0.2f, 0.2f);
+	prog.setUniform("Material.Shininess", 100.0f);
+
+	prog.setUniform("Light.Position", vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	prog.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
 }
 
 void Scene_Main::compile()
@@ -37,8 +51,10 @@ void Scene_Main::compile()
 	try {
 		prog.compileShader("shader/wave_anim_shader.vert");
 		prog.compileShader("shader/wave_anim_shader.frag");
+		prog.compileShader("shader/wave_anim_shader.geom");
 		prog.link();
 		prog.use();
+
 	} catch (GLSLProgramException &e) {
 		cerr << e.what() << endl;
 		exit(EXIT_FAILURE);
@@ -56,20 +72,17 @@ void Scene_Main::update( float t, UIHandler& uiHandler)
 
 void Scene_Main::render()
 {
-	prog.setUniform("Time", time);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	view = glm::lookAt(vec3(10, 10.0f, 10),
-		vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f, 100.0f);
-
-	prog.setUniform("Material.Kd", 0.2f * 0.3f, 0.5f * 0.3f, 0.9f * 0.3f);
-	prog.setUniform("Material.Ks", 0.0f, 0.0f, 0.0f);
-	prog.setUniform("Material.Ka", 0.2f, 0.5f, 0.9f);
-	prog.setUniform("Material.Shininess", 100.0f);
+	prog.setUniform("Time", time);
+	
 	model = mat4(1.0f);
 	setMatrices();
-	plane.render();
+	//plane.render();
+
+	ogre->render();
+
+	glFinish();
 }
 
 void Scene_Main::resize(int w, int h)
@@ -77,7 +90,8 @@ void Scene_Main::resize(int w, int h)
 	glViewport(0, 0, w, h);
 	width = w;
 	height = h;
-	projection = glm::perspective(glm::radians(60.0f), (float)w / h, 0.3f, 100.0f);
+
+	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f, 100.0f);
 }
 
 void Scene_Main::setMatrices()

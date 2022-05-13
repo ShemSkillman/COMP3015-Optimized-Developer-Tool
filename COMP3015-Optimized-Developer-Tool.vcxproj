@@ -175,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\wave_anim_shader.frag" />
+    <None Include="shader\wave_anim_shader.geom" />
     <None Include="shader\wave_anim_shader.vert" />
   </ItemGroup>
   <ItemGroup>

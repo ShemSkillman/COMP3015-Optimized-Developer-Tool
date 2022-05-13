@@ -8,6 +8,7 @@
 #include <plane.h>
 #include <UIHandler.h>
 
+#include <objmesh.h>
 class Scene_Main : public Scene
 {
 private:
@@ -15,11 +16,13 @@ private:
 
     Plane plane;
 
-    float angle;
+    float angle, tPrev, rotSpeed;
     float time;
 
     void setMatrices();
     void compile();
+
+    std::unique_ptr<ObjMesh> ogre;
 
 public:
     Scene_Main();

@@ -1,12 +1,10 @@
-#version 430
+#version 460
 
 layout (location = 0) in vec3 VertexPosition;
 layout (location = 1) in vec3 VertexNormal;
-layout (location = 2) in vec2 VertexTexCoord;
 
-out vec4 Position;
-out vec3 Normal;
-out vec2 TexCoord;
+out vec3 VNormal;
+out vec3 VPosition;
 
 uniform float Time;
 
@@ -33,11 +31,9 @@ void main()
 	vec3 n = vec3(0.0);
 	n.xyz = normalize(vec3(cos(u), 1.0, sin(i)));
 
-	// Pass values to the fragment shader
-	Position = ModelViewMatrix * pos;
-	Normal = NormalMatrix * n;
-	TexCoord = VertexTexCoord;
+	VNormal = normalize(NormalMatrix * VertexNormal);
+	VPosition = vec3(ModelViewMatrix * vec4(VertexPosition, 1.0));
 
 	// The position in clip coords
-	gl_Position = MVP * pos;
+	gl_Position = MVP * vec4(VertexPosition, 1.0);
 }

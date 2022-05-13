@@ -1,8 +1,9 @@
-#version 430
+#version 460
 
-layout (location = 0) in vec4 Position;
-layout (location = 1) in vec3 Normal;
-layout (location = 2) in vec2 TexCoord;
+in vec3 GPosition;
+in vec3 GNormal;
+
+flat in int GIsEdge;
 
 layout (location = 0) out vec4 FragColor;
 
@@ -17,6 +18,21 @@ uniform struct MaterialInfo {
  vec3 Ks; // Specular reflectivity
  float Shininess; // Specular shininess factor
 } Material;
+
+uniform vec4 LineColor;
+
+const int levels = 3;
+const float scaleFactor = 1.0 / levels;
+
+vec3 toonShade()
+{
+	vec3 s = normalize(Light.Position.xyz - GPosition.xyz);
+	vec3 ambient = Material.Ka;
+	float cosine = dot(s, GNormal);
+	vec3 diffuse = Material.Kd * ceil(cosine * levels) * scaleFactor;
+
+	return Light.Intensity * (ambient + diffuse);
+}
 
 vec4 blinnPhong(vec4 vertexPos, vec3 n)
 {
@@ -39,5 +55,10 @@ vec4 blinnPhong(vec4 vertexPos, vec3 n)
 
 void main()
 {
-	FragColor = blinnPhong(Position, Normal);
+	if (GIsEdge == 1) {
+		FragColor = LineColor;
+	}
+	else {
+		FragColor = vec4(toonShade(), 1.0);
+	}
 }

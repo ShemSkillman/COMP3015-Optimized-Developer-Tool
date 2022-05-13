@@ -81,7 +81,7 @@ void TriangleMesh::render() const {
     if(vao == 0) return;
 
     glBindVertexArray(vao);
-    glDrawElements(GL_TRIANGLES, nVerts, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES_ADJACENCY, nVerts, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
 
