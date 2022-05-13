@@ -18,8 +18,8 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
-Scene_Main::Scene_Main() : time(0), plane(20.0f, 20.0f, 200, 200) {
-	ogre = ObjMesh::loadWithAdjacency("media/bs_ears.obj");
+Scene_Main::Scene_Main() : time(0) {
+	planeObj = ObjMesh::loadWithAdjacency("media/plane.obj");
 }
 
 void Scene_Main::initScene()
@@ -29,15 +29,16 @@ void Scene_Main::initScene()
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glEnable(GL_DEPTH_TEST);
 
-	view = glm::lookAt(vec3(1.0f),
+	view = glm::lookAt(vec3(10.0f),
 		vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
 
 	prog.setUniform("EdgeWidth", 0.005f);
-	prog.setUniform("PctExtend", 0.25f);
+	prog.setUniform("PctExtend", 0.1f);
 	prog.setUniform("LineColor", vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	prog.setUniform("Material.Kd", 0.7f, 0.5f, 0.2f);
-	prog.setUniform("Material.Ka", 0.2f, 0.2f, 0.2f);
+	vec3 color = vec3(0.2f, 0.5f, 0.9f);
+	prog.setUniform("Material.Kd", color * 0.6f);
+	prog.setUniform("Material.Ka", color);
 
 	prog.setUniform("Material.Ks", 0.2f, 0.2f, 0.2f);
 	prog.setUniform("Material.Shininess", 100.0f);
@@ -78,9 +79,8 @@ void Scene_Main::render()
 	
 	model = mat4(1.0f);
 	setMatrices();
-	//plane.render();
 
-	ogre->render();
+	planeObj->render();
 
 	glFinish();
 }

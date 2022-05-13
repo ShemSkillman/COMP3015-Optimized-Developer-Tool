@@ -31,9 +31,9 @@ void main()
 	vec3 n = vec3(0.0);
 	n.xyz = normalize(vec3(cos(u), 1.0, sin(i)));
 
-	VNormal = normalize(NormalMatrix * VertexNormal);
-	VPosition = vec3(ModelViewMatrix * vec4(VertexPosition, 1.0));
+	VNormal = normalize(NormalMatrix * n);
+	VPosition = vec3(ModelViewMatrix * pos);
 
 	// The position in clip coords
-	gl_Position = MVP * vec4(VertexPosition, 1.0);
+	gl_Position = MVP * pos;
 }

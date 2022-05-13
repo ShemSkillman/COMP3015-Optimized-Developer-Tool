@@ -14,15 +14,13 @@ class Scene_Main : public Scene
 private:
     GLSLProgram prog;
 
-    Plane plane;
-
     float angle, tPrev, rotSpeed;
     float time;
 
     void setMatrices();
     void compile();
 
-    std::unique_ptr<ObjMesh> ogre;
+    std::unique_ptr<ObjMesh> planeObj;
 
 public:
     Scene_Main();
