@@ -1,10 +1,10 @@
 #ifndef SCENE_MAIN_H
 #define SCENE_MAIN_H
 
-#include "helper/scene.h"
+#include "scene.h"
 
 #include <glad/glad.h>
-#include "helper/glslprogram.h"
+#include "glslprogram.h"
 #include <plane.h>
 
 class Scene_Main : public Scene

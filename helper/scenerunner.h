@@ -10,7 +10,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include "../UIHandler.h"
+#include "UIHandler.h"
 
 class SceneRunner {
 private:

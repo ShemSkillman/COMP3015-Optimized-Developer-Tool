@@ -12,7 +12,7 @@ using std::string;
 using std::cerr;
 using std::endl;
 
-#include "helper/glutils.h"
+#include "glutils.h"
 
 using glm::vec3;
 using glm::vec4;

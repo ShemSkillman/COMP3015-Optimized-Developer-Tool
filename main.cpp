@@ -2,7 +2,6 @@
 #include "helper/scenerunner.h"
 #include "scene_main.h"
 
-
 int main(int argc, char* argv[])
 {
 	SceneRunner runner("Shader_Basics");
