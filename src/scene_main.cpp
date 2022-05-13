@@ -18,7 +18,7 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
-Scene_Main::Scene_Main() : time(0), plane(13.0f, 10.0f, 200, 2) {}
+Scene_Main::Scene_Main() : time(0), plane(20.0f, 20.0f, 200, 2) {}
 
 void Scene_Main::initScene()
 {
@@ -64,7 +64,7 @@ void Scene_Main::render()
 	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f, 100.0f);
 
 	prog.setUniform("Material.Kd", 0.2f, 0.5f, 0.9f);
-	prog.setUniform("Material.Ks", 0.8f, 0.8f, 0.8f);
+	prog.setUniform("Material.Ks", 0.2f, 0.2f, 0.2f);
 	prog.setUniform("Material.Ka", 0.2f, 0.5f, 0.9f);
 	prog.setUniform("Material.Shininess", 100.0f);
 	model = mat4(1.0f);
