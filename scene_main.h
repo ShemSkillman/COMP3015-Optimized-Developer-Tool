@@ -5,14 +5,19 @@
 
 #include <glad/glad.h>
 #include "helper/glslprogram.h"
+#include <plane.h>
 
 class Scene_Main : public Scene
 {
 private:
-    GLuint vaoHandle;
     GLSLProgram prog;
-    float angle;
 
+    Plane plane;
+
+    float angle;
+    float time;
+
+    void setMatrices();
     void compile();
 
 public:
