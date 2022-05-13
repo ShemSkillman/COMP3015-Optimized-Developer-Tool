@@ -19,10 +19,29 @@ void UIHandler::Poll()
 
 	ImGui::Begin("Console");
 
-	ImGui::Text("Other");
+	ImGui::SliderFloat("Wave Frequency", &freq, 0.1, 5, "%.2f", 1);
+
+	ImGui::SliderFloat("Wave move speed", &velocity, 0.1, 20, "%.2f", 1);
+
+	ImGui::SliderFloat("Wave Height", &amp, 0.1, 5, "%.2f", 1);
 
 	ImGui::End();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+float UIHandler::GetAmplitude()
+{
+	return amp;
+}
+
+float UIHandler::GetFrequency()
+{
+	return freq;
+}
+
+float UIHandler::GetVelocity()
+{
+	return velocity;
 }

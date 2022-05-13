@@ -6,6 +6,7 @@
 #include <glad/glad.h>
 #include "glslprogram.h"
 #include <plane.h>
+#include <UIHandler.h>
 
 class Scene_Main : public Scene
 {
@@ -24,7 +25,7 @@ public:
     Scene_Main();
 
     void initScene();
-    void update( float t );
+    void update( float t , UIHandler& uiHandler);
     void render();
     void resize(int, int);
 };

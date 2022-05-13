@@ -45,9 +45,13 @@ void Scene_Main::compile()
 	}
 }
 
-void Scene_Main::update( float t )
+void Scene_Main::update( float t, UIHandler& uiHandler)
 {
     time = t;
+
+	prog.setUniform("Freq", uiHandler.GetFrequency());
+	prog.setUniform("Velocity", uiHandler.GetVelocity());
+	prog.setUniform("Amp", uiHandler.GetAmplitude());
 }
 
 void Scene_Main::render()
