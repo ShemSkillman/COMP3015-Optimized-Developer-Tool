@@ -25,7 +25,9 @@ void UIHandler::Poll()
 
 	ImGui::SliderFloat("Wave move speed", &velocity, 0.1, 20, "%.2f", 1);
 
-	ImGui::SliderFloat("Wave Height", &amp, 0.1, 50, "%.2f", 1);
+	ImGui::SliderFloat("Wave Height", &amp, 0.1, 20, "%.2f", 1);
+
+	ImGui::Checkbox("Use Noise", &useNoise);
 
 	const char* label = "test";
 	float col[3] = { waveColor.x, waveColor.y, waveColor.z };
@@ -58,4 +60,15 @@ float UIHandler::GetVelocity()
 glm::vec3 UIHandler::GetWaveColor()
 {
 	return waveColor;
+}
+
+bool UIHandler::GetUseNoise()
+{
+	return useNoise;
+}
+
+bool UIHandler::IsFocused()
+{
+	ImGuiIO& io = ImGui::GetIO();
+	return io.WantCaptureKeyboard || io.WantCaptureMouse;
 }

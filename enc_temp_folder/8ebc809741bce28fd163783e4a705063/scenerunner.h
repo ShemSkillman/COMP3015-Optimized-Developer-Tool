@@ -13,6 +13,9 @@
 #include "UIHandler.h"
 #include <Camera.h>
 
+static bool initializedCursorPos = false;
+static glm::vec2 cursorDelta, prevCursorPos;
+
 class SceneRunner {
 private:
     GLFWwindow * window;
@@ -50,6 +53,8 @@ public:
             exit( EXIT_FAILURE );
         }
         glfwMakeContextCurrent(window);
+
+        glfwSetCursorPosCallback(window, CursorPositionCallBack);
 
         // Get framebuffer size
         glfwGetFramebufferSize(window, &fbw, &fbh);
@@ -118,6 +123,21 @@ private:
         }
     }
 
+    static void CursorPositionCallBack(GLFWwindow* window, double xpos, double ypos)
+    {
+        if (!initializedCursorPos)
+        {
+            initializedCursorPos = true;
+            cursorDelta = glm::vec2(0.0f);
+            prevCursorPos = glm::vec2(xpos, ypos);
+            return;
+        }
+
+        glm::vec2 currentPos = glm::vec2(xpos, ypos);
+        cursorDelta = currentPos - prevCursorPos;
+        prevCursorPos = currentPos;
+    }
+
     void mainLoop(GLFWwindow * window, Scene & scene) {
         UIHandler uiHandler(window);
 
@@ -126,6 +146,7 @@ private:
 			
             Camera::getCamera().processInput(window);
             scene.update(float(glfwGetTime()), uiHandler);
+            cursorDelta = glm::vec2(0.0f);
 
             scene.render();
 

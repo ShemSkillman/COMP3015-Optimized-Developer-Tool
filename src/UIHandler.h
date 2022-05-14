@@ -15,11 +15,13 @@ public:
 	float GetVelocity();
 	float GetAmplitude();
 	glm::vec3 GetWaveColor();
+	bool GetUseNoise();
+	bool IsFocused();
 
 private:
 	float freq = 2.5;
 	float velocity = 2.5;
 	float amp = 0.6;
+	bool useNoise = false;
 	glm::vec3 waveColor;
-
 };

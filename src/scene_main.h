@@ -12,7 +12,7 @@
 class Scene_Main : public Scene
 {
 private:
-    GLSLProgram prog;
+    GLSLProgram waveProg, waveNoiseProg;
 
     float angle, tPrev, rotSpeed;
     float time;
