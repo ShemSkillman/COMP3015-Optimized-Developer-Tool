@@ -25,7 +25,7 @@ void UIHandler::Poll()
 
 	ImGui::SliderFloat("Wave move speed", &velocity, 0.1, 20, "%.2f", 1);
 
-	ImGui::SliderFloat("Wave Height", &amp, 0.1, 5, "%.2f", 1);
+	ImGui::SliderFloat("Wave Height", &amp, 0.1, 50, "%.2f", 1);
 
 	const char* label = "test";
 	float col[3] = { waveColor.x, waveColor.y, waveColor.z };

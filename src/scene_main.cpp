@@ -13,6 +13,7 @@ using std::cerr;
 using std::endl;
 
 #include "glutils.h"
+#include "noisetex.h"
 
 using glm::vec3;
 using glm::vec4;
@@ -38,6 +39,12 @@ void Scene_Main::initScene()
 
 	prog.setUniform("Light.Position", vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	prog.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
+
+	GLuint noiseTex = NoiseTex::generatePeriodic2DTex(1, 0.5f, 100, 100);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, noiseTex);
+
+	prog.setUniform("NoiseTex", 0);
 }
 
 void Scene_Main::compile()
