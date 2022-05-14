@@ -14,7 +14,7 @@ class Scene_Main : public Scene
 private:
     UIHandler& uiHandler;
 
-    GLSLProgram waveProg, waveNoiseProg;
+    GLSLProgram waveProg, waveNoiseProg, basicProg;
 
     float angle, tPrev, rotSpeed;
     float time;
@@ -23,6 +23,7 @@ private:
     void compile();
 
     std::unique_ptr<ObjMesh> planeObj;
+    std::unique_ptr<ObjMesh> ship;
 
 
 public:

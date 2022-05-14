@@ -176,6 +176,7 @@
     <ClCompile Include="src\UIHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shader\basic_shader.vert" />
     <None Include="shader\wave_anim_noise_shader.vert" />
     <None Include="shader\wave_anim_shader.frag" />
     <None Include="shader\wave_anim_shader.geom" />

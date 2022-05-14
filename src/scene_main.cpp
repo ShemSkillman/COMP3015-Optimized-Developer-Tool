@@ -23,6 +23,7 @@ using glm::mat4;
 
 Scene_Main::Scene_Main(UIHandler& uiHandler) : time(0), uiHandler(uiHandler) {
 	planeObj = ObjMesh::loadWithAdjacency("media/plane.obj");
+	ship = ObjMesh::loadWithAdjacency("media/SHIP.obj");
 }
 
 void Scene_Main::initScene()
@@ -43,6 +44,15 @@ void Scene_Main::initScene()
 
 	waveProg.setUniform("Light.Position", vec4(10.0f, 10.0f, 10.0f, 1.0f));
 	waveProg.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
+
+	basicProg.use();
+
+	basicProg.setUniform("EdgeWidth", 0.005f);
+	basicProg.setUniform("PctExtend", 0.1f);
+	basicProg.setUniform("LineColor", vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+	basicProg.setUniform("Light.Position", vec4(10.0f, 10.0f, 10.0f, 1.0f));
+	basicProg.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
 
 	waveNoiseProg.use();
 
@@ -72,6 +82,11 @@ void Scene_Main::compile()
 		waveNoiseProg.compileShader("shader/wave_anim_shader.frag");
 		waveNoiseProg.compileShader("shader/wave_anim_shader.geom");
 		waveNoiseProg.link();
+
+		basicProg.compileShader("shader/basic_shader.vert");
+		basicProg.compileShader("shader/wave_anim_shader.frag");
+		basicProg.compileShader("shader/wave_anim_shader.geom");
+		basicProg.link();
 
 	} catch (GLSLProgramException &e) {
 		cerr << e.what() << endl;
@@ -107,6 +122,12 @@ void Scene_Main::update(float t)
 
 	waveProg.setUniform("Time", time);
 
+	basicProg.use();
+
+	vec3 shipColor = vec3(0.8f, 0.6f, 0.2f);
+	basicProg.setUniform("Material.Kd", shipColor * 0.6f);
+	basicProg.setUniform("Material.Ka", shipColor);
+
 	waveNoiseProg.use();
 
 	waveNoiseProg.setUniform("Material.Kd", color * 0.6f);
@@ -137,6 +158,9 @@ void Scene_Main::render()
 
 	planeObj->render();
 
+	basicProg.use();
+	ship->render();
+
 	glFinish();
 }
 
@@ -157,6 +181,12 @@ void Scene_Main::setMatrices()
 	waveProg.setUniform("NormalMatrix",
 		glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
 	waveProg.setUniform("MVP", projection * mv);
+
+	basicProg.use();
+	basicProg.setUniform("ModelViewMatrix", mv);
+	basicProg.setUniform("NormalMatrix",
+		glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
+	basicProg.setUniform("MVP", projection * mv);
 
 	waveNoiseProg.use();
 	waveNoiseProg.setUniform("ModelViewMatrix", mv);
