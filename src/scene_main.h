@@ -12,6 +12,8 @@
 class Scene_Main : public Scene
 {
 private:
+    UIHandler& uiHandler;
+
     GLSLProgram waveProg, waveNoiseProg;
 
     float angle, tPrev, rotSpeed;
@@ -22,11 +24,12 @@ private:
 
     std::unique_ptr<ObjMesh> planeObj;
 
+
 public:
-    Scene_Main();
+    Scene_Main(UIHandler& uiHandler);
 
     void initScene();
-    void update( float t , UIHandler& uiHandler);
+    void update(float t);
     void render();
     void resize(int, int);
 };

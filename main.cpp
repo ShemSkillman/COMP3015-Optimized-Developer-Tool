@@ -4,11 +4,12 @@
 
 int main(int argc, char* argv[])
 {
-	SceneRunner runner("Shader_Basics");
+	UIHandler uiHandler;
+	SceneRunner runner("Shader_Basics", uiHandler);
 
 	std::unique_ptr<Scene> scene;
 
-	scene = std::unique_ptr<Scene>(new Scene_Main());
+	scene = std::unique_ptr<Scene>(new Scene_Main(uiHandler));
 
 	return runner.run(*scene);
 }

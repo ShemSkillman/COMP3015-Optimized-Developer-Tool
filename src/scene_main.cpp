@@ -21,7 +21,7 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
-Scene_Main::Scene_Main() : time(0) {
+Scene_Main::Scene_Main(UIHandler& uiHandler) : time(0), uiHandler(uiHandler) {
 	planeObj = ObjMesh::loadWithAdjacency("media/plane.obj");
 }
 
@@ -53,7 +53,7 @@ void Scene_Main::initScene()
 	waveNoiseProg.setUniform("Light.Position", vec4(10.0f, 10.0f, 10.0f, 1.0f));
 	waveNoiseProg.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
 
-	GLuint noiseTex = NoiseTex::generatePeriodic2DTex(1, 0.5f, 100, 100);
+	GLuint noiseTex = NoiseTex::generatePeriodic2DTex(uiHandler.GetFrequency(), 0.5f, 100, 100);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, noiseTex);
 
@@ -79,11 +79,21 @@ void Scene_Main::compile()
 	}
 }
 
-void Scene_Main::update( float t, UIHandler& uiHandler)
+void Scene_Main::update(float t)
 {
 	view = Camera::getCamera().getView();
 
-    time = t;
+	static float freq;
+	if (freq != uiHandler.GetFrequency() && uiHandler.GetUseNoise())
+	{
+		freq = uiHandler.GetFrequency();
+
+		initScene();
+
+		return;
+	}
+
+	time = t;
 
 	waveProg.use();
 

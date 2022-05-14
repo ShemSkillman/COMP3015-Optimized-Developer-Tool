@@ -26,45 +26,9 @@ glm::mat4 Camera::getView()
     float camX = sin(cameraPos.x) * radius;
     float camZ = cos(cameraPos.x) * radius;
 
+    cameraPos.y = glm::clamp(cameraPos.y, -5.0f, 40.0f);
+
 	return glm::lookAt(glm::vec3(camX, cameraPos.y, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
-}
-
-void Camera::mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    Camera::getCamera().setMouseInput(xpos, ypos);
-}
-
-void Camera::setMouseInput(float xpos, float ypos)
-{
-    if (firstMouse)
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
-    lastX = xpos;
-    lastY = ypos;
-
-    float sensitivity = 0.1f;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    yaw += xoffset;
-    pitch += yoffset;
-
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
-    glm::vec3 direction;
-    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    direction.y = sin(glm::radians(pitch));
-    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(direction);
 }
 
 Camera& Camera::getCamera()

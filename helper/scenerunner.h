@@ -15,12 +15,13 @@
 
 class SceneRunner {
 private:
+    UIHandler& uiHandler;
     GLFWwindow * window;
     int fbw, fbh;
 	bool debug;           // Set true to enable debug messages
 
 public:
-    SceneRunner(const std::string & windowTitle, int width = WIN_WIDTH, int height = WIN_HEIGHT, int samples = 0) : debug(true) {
+    SceneRunner(const std::string & windowTitle, UIHandler& uiHandler, int width = WIN_WIDTH, int height = WIN_HEIGHT, int samples = 0) : debug(true), uiHandler(uiHandler) {
         // Initialize GLFW
         if( !glfwInit() ) exit( EXIT_FAILURE );
 
@@ -49,6 +50,9 @@ public:
             glfwTerminate();
             exit( EXIT_FAILURE );
         }
+
+        uiHandler.Init(window);
+
         glfwMakeContextCurrent(window);
 
         // Get framebuffer size
@@ -119,13 +123,12 @@ private:
     }
 
     void mainLoop(GLFWwindow * window, Scene & scene) {
-        UIHandler uiHandler(window);
 
         while( ! glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE) ) {
             GLUtils::checkForOpenGLError(__FILE__,__LINE__);
 			
             Camera::getCamera().processInput(window);
-            scene.update(float(glfwGetTime()), uiHandler);
+            scene.update(float(glfwGetTime()));
 
             scene.render();
 
@@ -135,8 +138,8 @@ private:
 
             glfwPollEvents();
 			int state = glfwGetKey(window, GLFW_KEY_SPACE);
-			if (state == GLFW_PRESS)
-				scene.animate(!scene.animating());
+            if (state == GLFW_PRESS)
+                scene.animate(!scene.animating());
         }
     }
 };

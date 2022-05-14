@@ -1,20 +1,33 @@
 #include "UIHandler.h"
 
-UIHandler::UIHandler(GLFWwindow* window)
+UIHandler::UIHandler() {}
+
+void UIHandler::Init(GLFWwindow* window)
 {
-	IMGUI_CHECKVERSION();
-
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 400");
-	ImGui::StyleColorsDark();
-
-	waveColor = glm::vec3(0.2f, 0.5f, 0.9f);
+	UIHandler::window = window;
 }
 
 void UIHandler::Poll()
 {
+	if (window == nullptr)
+	{
+		return;
+	}
+	else if (!initialized)
+	{
+		IMGUI_CHECKVERSION();
+
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO();
+		ImGui_ImplGlfw_InitForOpenGL(window, true);
+		ImGui_ImplOpenGL3_Init("#version 400");
+		ImGui::StyleColorsDark();
+
+		waveColor = glm::vec3(0.2f, 0.5f, 0.9f);
+
+		initialized = true;
+	}
+
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();

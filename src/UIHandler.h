@@ -8,8 +8,9 @@
 class UIHandler
 {
 public:
-	UIHandler(GLFWwindow* window);
+	UIHandler();
 	void Poll();
+	void Init(GLFWwindow* window);
 
 	float GetFrequency();
 	float GetVelocity();
@@ -18,10 +19,14 @@ public:
 	bool GetUseNoise();
 	bool IsFocused();
 
+
 private:
-	float freq = 2.5;
-	float velocity = 2.5;
-	float amp = 0.6;
+	bool initialized = false;
+	GLFWwindow* window;
+
+	float freq = 1;
+	float velocity = 4;
+	float amp = 2;
 	bool useNoise = false;
 	glm::vec3 waveColor;
 };

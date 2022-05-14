@@ -12,7 +12,8 @@ public:
     int width;
     int height;
 
-	Scene() : m_animate(true), width(1280), height(720) { }
+	Scene(UIHandler& uiHandler) :  m_animate(true), width(1920), height(1080) { }
+    Scene() {}
 	virtual ~Scene() {}
 
 	void setDimensions( int w, int h ) {
@@ -29,7 +30,7 @@ public:
       This is called prior to every frame.  Use this
       to update your animation.
       */
-    virtual void update( float t, UIHandler& uiHandler) = 0;
+    virtual void update( float t) = 0;
 
     /**
       Draw your scene.

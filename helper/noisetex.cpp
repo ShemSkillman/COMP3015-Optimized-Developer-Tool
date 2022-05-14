@@ -6,8 +6,12 @@
 #include <glm/gtc/noise.hpp>
 
 int NoiseTex::storeTex( GLubyte * data, int w, int h ) {
-  GLuint texID;
-  glGenTextures(1, &texID);
+  static GLuint texID = 999;
+
+  if (texID == 999)
+  {
+      glGenTextures(1, &texID);
+  }
 
   glBindTexture(GL_TEXTURE_2D, texID);
   glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
@@ -16,8 +20,8 @@ int NoiseTex::storeTex( GLubyte * data, int w, int h ) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  
-  return texID;
+
+  return  texID;
 }
 
 int NoiseTex::generate2DTex(float baseFreq, float persistence, int w, int h, bool periodic) {
