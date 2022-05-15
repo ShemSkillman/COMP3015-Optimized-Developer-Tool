@@ -37,33 +37,13 @@ void Scene_Main::initScene()
     glEnable(GL_DEPTH_TEST);
 
 	waveProg.use();
-
 	waveProg.setUniform("PctExtend", 0.1f);
 
-	waveProg.setUniform("Light.Position", vec4(10.0f, 10.0f, 10.0f, 1.0f));
-	waveProg.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
-
 	basicProg.use();
-
 	basicProg.setUniform("PctExtend", 0.1f);
 
-	basicProg.setUniform("Light.Position", vec4(10.0f, 10.0f, 10.0f, 1.0f));
-	basicProg.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
-
 	waveNoiseProg.use();
-
 	waveNoiseProg.setUniform("PctExtend", 0.1f);
-
-	waveNoiseProg.setUniform("Light.Position", vec4(10.0f, 10.0f, 10.0f, 1.0f));
-	waveNoiseProg.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
-
-	GLuint noiseTex = NoiseTex::generatePeriodic2DTex(uiHandler.GetWaveConfig().frequency, 0.5f, 100, 100);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, noiseTex);
-
-	waveNoiseProg.setUniform("NoiseTex", 0);
-
-	currentFreq = uiHandler.GetWaveConfig().frequency;
 }
 
 void Scene_Main::compile()
@@ -94,10 +74,16 @@ void Scene_Main::update(float t)
 {
 	view = Camera::getCamera().getView();
 
+	// Regenerate noise map if frequency changed
 	if (currentFreq != uiHandler.GetWaveConfig().frequency && uiHandler.GetWaveConfig().useNoise)
 	{
 		currentFreq = uiHandler.GetWaveConfig().frequency;
 		GLuint noiseTex = NoiseTex::generatePeriodic2DTex(uiHandler.GetWaveConfig().frequency, 0.5f, 100, 100);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, noiseTex);
+
+		waveNoiseProg.setUniform("NoiseTex", 0);
 	}
 
 	time = t;
@@ -105,6 +91,8 @@ void Scene_Main::update(float t)
 	WaveConfig waveConfig = uiHandler.GetWaveConfig();
 	LightConfig lightConfig = uiHandler.GetLightConfig();
 	ShipConfig shipConfig = uiHandler.getShipConfig();
+
+	// UPDATE WAVE PROGRAM //
 
 	waveProg.use();
 
@@ -125,6 +113,8 @@ void Scene_Main::update(float t)
 
 	waveProg.setUniform("Levels", lightConfig.cartoonLevels);
 
+	// UPDATE SHIP PROGRAM //
+
 	basicProg.use();
 
 	basicProg.setUniform("Material.Kd", shipConfig.shipColor * 0.6f);
@@ -137,6 +127,8 @@ void Scene_Main::update(float t)
 	basicProg.setUniform("Light.Intensity", vec3(1.0f) * lightConfig.lightIntensity);
 
 	basicProg.setUniform("Levels", lightConfig.cartoonLevels);
+
+	// UPDATE WAVE NOISE PROGRAM //
 
 	waveNoiseProg.use();
 
@@ -162,6 +154,8 @@ void Scene_Main::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 
+	// RENDER WAVES //
+
 	model = mat4(1.0f);
 
 	if (uiHandler.GetWaveConfig().useNoise)
@@ -175,6 +169,8 @@ void Scene_Main::render()
 	}
 
 	planeObj->render();
+
+	// RENDER SHIP //
 
 	ShipConfig shipConfig = uiHandler.getShipConfig();
 
