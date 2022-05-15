@@ -1,5 +1,8 @@
 #include <Camera.h>
 
+// Camera functionality is based off OpenGLTutorial Camera guide
+// Source: https://learnopengl.com/Getting-started/Camera 
+
 void Camera::processInput(GLFWwindow* window)
 {
     float currentFrame = glfwGetTime();

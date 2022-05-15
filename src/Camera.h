@@ -2,6 +2,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 
+// Camera functionality is based off OpenGLTutorial Camera guide
+// Source: https://learnopengl.com/Getting-started/Camera 
+
 class Camera
 {
 public:

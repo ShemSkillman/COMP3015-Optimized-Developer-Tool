@@ -32,6 +32,9 @@ vec3 getNormal(vec4 noise)
 
 void main()
 {
+	// Using noise to generate waves was based off a stack overflow solution
+	// Source: https://stackoverflow.com/questions/30397320/opengl-water-waves-with-noise
+
 	vec2 offset = Time * Velocity * vec2(0.1f);
 	vec4 noise = texture(NoiseTex, TexCoords + offset);
 
