@@ -102,43 +102,60 @@ void Scene_Main::update(float t)
 
 	time = t;
 
+	WaveConfig waveConfig = uiHandler.GetWaveConfig();
+	LightConfig lightConfig = uiHandler.GetLightConfig();
+	ShipConfig shipConfig = uiHandler.getShipConfig();
+
 	waveProg.use();
 
-	waveProg.setUniform("Freq", uiHandler.GetWaveConfig().frequency);
-	waveProg.setUniform("Velocity", uiHandler.GetWaveConfig().velocity);
-	waveProg.setUniform("Amp", uiHandler.GetWaveConfig().amplitude);
+	waveProg.setUniform("Freq", waveConfig.frequency);
+	waveProg.setUniform("Velocity", waveConfig.velocity);
+	waveProg.setUniform("Amp", waveConfig.amplitude);
 
-	waveProg.setUniform("LineColor", vec4(uiHandler.GetWaveConfig().lineColor, 1.0f));
-	waveProg.setUniform("EdgeWidth", uiHandler.GetWaveConfig().lineThickness);
+	waveProg.setUniform("LineColor", vec4(waveConfig.lineColor, 1.0f));
+	waveProg.setUniform("EdgeWidth", waveConfig.lineThickness);
 
-	vec3 color = uiHandler.GetWaveConfig().waveColor;
-	waveProg.setUniform("Material.Kd", color * 0.6f);
-	waveProg.setUniform("Material.Ka", color);
+	waveProg.setUniform("Material.Kd", waveConfig.waveColor * 0.6f);
+	waveProg.setUniform("Material.Ka", waveConfig.waveColor);
 
 	waveProg.setUniform("Time", time);
 
+	waveProg.setUniform("Light.Position", vec4(lightConfig.lightPos, 1.0f));
+	waveProg.setUniform("Light.Intensity", vec3(1.0f) * lightConfig.lightIntensity);
+
+	waveProg.setUniform("Levels", lightConfig.cartoonLevels);
+
 	basicProg.use();
 
-	vec3 shipColor = uiHandler.getShipConfig().shipColor;
-	basicProg.setUniform("Material.Kd", shipColor * 0.6f);
-	basicProg.setUniform("Material.Ka", shipColor);
+	basicProg.setUniform("Material.Kd", shipConfig.shipColor * 0.6f);
+	basicProg.setUniform("Material.Ka", shipConfig.shipColor);
 
-	basicProg.setUniform("LineColor", vec4(uiHandler.getShipConfig().lineColor, 1.0f));
-	basicProg.setUniform("EdgeWidth", uiHandler.getShipConfig().lineThickness);
+	basicProg.setUniform("LineColor", vec4(shipConfig.lineColor, 1.0f));
+	basicProg.setUniform("EdgeWidth", shipConfig.lineThickness);
+
+	basicProg.setUniform("Light.Position", vec4(lightConfig.lightPos, 1.0f));
+	basicProg.setUniform("Light.Intensity", vec3(1.0f) * lightConfig.lightIntensity);
+
+	basicProg.setUniform("Levels", lightConfig.cartoonLevels);
 
 	waveNoiseProg.use();
 
-	waveNoiseProg.setUniform("Material.Kd", color * 0.6f);
-	waveNoiseProg.setUniform("Material.Ka", color);
+	waveNoiseProg.setUniform("Material.Kd", waveConfig.waveColor * 0.6f);
+	waveNoiseProg.setUniform("Material.Ka", waveConfig.waveColor);
 
-	waveNoiseProg.setUniform("LineColor", vec4(uiHandler.GetWaveConfig().lineColor, 1.0f));
-	waveNoiseProg.setUniform("EdgeWidth", uiHandler.GetWaveConfig().lineThickness);
+	waveNoiseProg.setUniform("LineColor", vec4(waveConfig.lineColor, 1.0f));
+	waveNoiseProg.setUniform("EdgeWidth", waveConfig.lineThickness);
 
-	waveNoiseProg.setUniform("Freq", uiHandler.GetWaveConfig().frequency);
-	waveNoiseProg.setUniform("Velocity", uiHandler.GetWaveConfig().velocity);
-	waveNoiseProg.setUniform("Amp", uiHandler.GetWaveConfig().amplitude);
+	waveNoiseProg.setUniform("Freq", waveConfig.frequency);
+	waveNoiseProg.setUniform("Velocity", waveConfig.velocity);
+	waveNoiseProg.setUniform("Amp", waveConfig.amplitude);
 
 	waveNoiseProg.setUniform("Time", time);	
+
+	waveNoiseProg.setUniform("Light.Position", vec4(lightConfig.lightPos, 1.0f));
+	waveNoiseProg.setUniform("Light.Intensity", vec3(1.0f) * lightConfig.lightIntensity);
+
+	waveNoiseProg.setUniform("Levels", lightConfig.cartoonLevels);
 }
 
 void Scene_Main::render()
@@ -149,7 +166,7 @@ void Scene_Main::render()
 
 	if (uiHandler.GetWaveConfig().useNoise)
 	{
-		model = glm::translate(model, vec3(0.0f, -0.5f * uiHandler.GetWaveConfig().amplitude, 0.0f));
+		model = glm::translate(model, vec3(0.0f, -1.0f * uiHandler.GetWaveConfig().amplitude, 0.0f));
 		setMatrices(waveNoiseProg);
 	}
 	else
@@ -167,7 +184,7 @@ void Scene_Main::render()
 	float cosValue = cos(time * shipConfig.moveSpeed);
 
 	float bob = (shipConfig.bobHeight * (shipConfig.invertBob ? sinValue : cosValue));
-	model = glm::translate(model, vec3(0.0f, bob, 0.0f));
+	model = glm::translate(model, vec3(0.0f, shipConfig.shipPosY + bob, 0.0f));
 
 	model = glm::rotate(model, shipConfig.rotY * (shipConfig.invertRotY ? sinValue : cosValue), glm::vec3(0.0f, 1.0f, 0.0f));
 

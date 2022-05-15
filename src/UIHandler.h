@@ -25,6 +25,13 @@ struct WaveConfig
 	float lineThickness = 0.005f;;
 };
 
+struct LightConfig
+{
+	glm::vec3 lightPos = glm::vec3(0.0f);
+	float lightIntensity = 1.0f;
+	int cartoonLevels = 3;
+};
+
 class UIHandler
 {
 public:
@@ -33,6 +40,7 @@ public:
 
 	ShipConfig getShipConfig();
 	WaveConfig GetWaveConfig();
+	LightConfig GetLightConfig();
 
 
 private:
@@ -41,6 +49,7 @@ private:
 
 	ShipConfig shipConfig;
 	WaveConfig waveConfig;
+	LightConfig lightConfig;
 
 private:
 	void AddSpacing(int count);

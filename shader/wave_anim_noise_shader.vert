@@ -22,7 +22,7 @@ uniform mat4 MVP;
 
 float getHeight(vec4 noise)
 {
-	return noise.a * Amp;
+	return noise.a * Amp * 2.0f;
 }
 
 vec3 getNormal(vec4 noise)

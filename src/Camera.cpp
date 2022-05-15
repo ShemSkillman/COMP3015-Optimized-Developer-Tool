@@ -7,13 +7,15 @@ void Camera::processInput(GLFWwindow* window)
     lastFrame = currentFrame;
 
 	float cameraSpeed = 2.5f * deltaTime;
+    const float upDownSpeedMult = 10.0f;
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS ||
         glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-        cameraPos.y -= cameraSpeed * 10;
+        cameraPos.y -= cameraSpeed * upDownSpeedMult;
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS ||
         glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        cameraPos.y += cameraSpeed * 10;
+        cameraPos.y += cameraSpeed * upDownSpeedMult;
 
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS ||
         glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)

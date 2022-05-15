@@ -20,16 +20,16 @@ uniform struct MaterialInfo {
 } Material;
 
 uniform vec4 LineColor;
+uniform int Levels = 3;
 
-const int levels = 3;
-const float scaleFactor = 1.0 / levels;
+const float scaleFactor = 1.0 / Levels;
 
 vec3 toonShade()
 {
 	vec3 s = normalize(Light.Position.xyz - GPosition.xyz);
 	vec3 ambient = Material.Ka;
 	float cosine = dot(s, GNormal);
-	vec3 diffuse = Material.Kd * ceil(cosine * levels) * scaleFactor;
+	vec3 diffuse = Material.Kd * ceil(cosine * Levels) * scaleFactor;
 
 	return Light.Intensity * (ambient + diffuse);
 }

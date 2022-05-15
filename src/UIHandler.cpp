@@ -30,6 +30,24 @@ void UIHandler::Poll()
 
 	ImGui::Begin("Console");
 
+	ImGui::Text("Light Settings");
+	
+	AddSpacing(3);
+	ImGui::SliderFloat("Light Intensity", &lightConfig.lightIntensity, 0.0f, 1.0f, "%.2f", 1);
+
+	AddSpacing(3);
+	ImGui::SliderInt("Cartoon Levels", &lightConfig.cartoonLevels, 1, 20, "%d", 1);
+
+	AddSpacing(3);
+	ImGui::SliderFloat("Light X Position", &lightConfig.lightPos.x, -50.0f, 50.0f, "%.2f", 1);
+
+	AddSpacing(3);
+	ImGui::SliderFloat("Light Y Position", &lightConfig.lightPos.y, 0.0f, 100.0f, "%.2f", 1);
+
+	AddSpacing(3);
+	ImGui::SliderFloat("Light Z Position", &lightConfig.lightPos.z, -50.0f, 50.0f, "%.2f", 1);
+
+	AddSpacing(6);
 	ImGui::Text("Wave Settings");
 
 	AddSpacing(3);
@@ -45,9 +63,8 @@ void UIHandler::Poll()
 	ImGui::Checkbox("Use Noise", &waveConfig.useNoise);
 
 	AddSpacing(3);
-	const char* label = "Wave Color";
 	float col[3] = { waveConfig.waveColor.x, waveConfig.waveColor.y, waveConfig.waveColor.z };
-	if (ImGui::ColorPicker3(label, col))
+	if (ImGui::ColorPicker3("Wave Color", col))
 	{
 		waveConfig.waveColor = glm::vec3(col[0], col[1], col[2]);
 	}
@@ -121,6 +138,11 @@ void UIHandler::Poll()
 WaveConfig UIHandler::GetWaveConfig()
 {
 	return waveConfig;
+}
+
+LightConfig UIHandler::GetLightConfig()
+{
+	return lightConfig;
 }
 
 ShipConfig UIHandler::getShipConfig()
