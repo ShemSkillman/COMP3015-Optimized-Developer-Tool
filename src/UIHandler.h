@@ -8,6 +8,7 @@
 struct ShipConfig
 {
 	float moveSpeed = 1.0f;
+	float startingRotY = 0.0f;
 	float rotX = 0.1f, rotY = 0.05f, rotZ = 0.08f;
 	bool invertRotX = false, invertRotY = true, invertRotZ = false;
 	float bobHeight = 0.25f, shipPosY = -0.6f;

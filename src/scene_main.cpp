@@ -182,7 +182,7 @@ void Scene_Main::render()
 	float bob = (shipConfig.bobHeight * (shipConfig.invertBob ? sinValue : cosValue));
 	model = glm::translate(model, vec3(0.0f, shipConfig.shipPosY + bob, 0.0f));
 
-	model = glm::rotate(model, shipConfig.rotY * (shipConfig.invertRotY ? sinValue : cosValue), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, shipConfig.startingRotY + shipConfig.rotY * (shipConfig.invertRotY ? sinValue : cosValue), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	model = glm::rotate(model, shipConfig.rotX * (shipConfig.invertRotX ? sinValue : cosValue), glm::vec3(1.0f, 0.0f, 0.0f));
 

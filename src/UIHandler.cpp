@@ -86,6 +86,9 @@ void UIHandler::Poll()
 	ImGui::SliderFloat("Move Speed", &shipConfig.moveSpeed, 0.1f, 10.0f, "%.1f", 1);
 
 	AddSpacing(3);
+	ImGui::SliderAngle("Starting Y Rotation", &shipConfig.startingRotY, 0.0f, 360.0f);
+
+	AddSpacing(3);
 	ImGui::SliderAngle("Max X Rotation", &shipConfig.rotX, -90.0f, 90.0f);
 
 	AddSpacing(3);
