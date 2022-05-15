@@ -28,11 +28,9 @@ struct WaveConfig
 class UIHandler
 {
 public:
-	UIHandler();
 	void Poll();
 	void Init(GLFWwindow* window);
 
-	bool IsFocused();
 	ShipConfig getShipConfig();
 	WaveConfig GetWaveConfig();
 

@@ -1,7 +1,5 @@
 #include "UIHandler.h"
 
-UIHandler::UIHandler() {}
-
 void UIHandler::Init(GLFWwindow* window)
 {
 	UIHandler::window = window;
@@ -123,12 +121,6 @@ void UIHandler::Poll()
 WaveConfig UIHandler::GetWaveConfig()
 {
 	return waveConfig;
-}
-
-bool UIHandler::IsFocused()
-{
-	ImGuiIO& io = ImGui::GetIO();
-	return io.WantCaptureKeyboard || io.WantCaptureMouse;
 }
 
 ShipConfig UIHandler::getShipConfig()

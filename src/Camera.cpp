@@ -7,16 +7,20 @@ void Camera::processInput(GLFWwindow* window)
     lastFrame = currentFrame;
 
 	float cameraSpeed = 2.5f * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS ||
+        glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
         cameraPos.y -= cameraSpeed * 10;
 
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS ||
+        glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
         cameraPos.y += cameraSpeed * 10;
 
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS ||
+        glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		cameraPos.x -= cameraSpeed;
 
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS ||
+        glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		cameraPos.x += cameraSpeed;
 }
 
