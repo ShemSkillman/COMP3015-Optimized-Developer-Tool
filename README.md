@@ -4,9 +4,8 @@
 
 [Code Walkthrough Video Link]()
 
-[]!(regular_wave.gif)
-
-[]!(noise_wave.gif)
+![](regular_wave.gif)
+![](noise_wave.gif)
 
 This is a tool that uses OpenGL and 2 shader techniques to generate ocean waves and an animated ship. 
 
