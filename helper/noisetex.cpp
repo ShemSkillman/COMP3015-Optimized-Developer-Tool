@@ -6,13 +6,16 @@
 #include <glm/gtc/noise.hpp>
 
 int NoiseTex::storeTex( GLubyte * data, int w, int h ) {
-  static GLuint texID = 999;
+  static bool loadedTex = false;
+  static GLuint texID;
 
-  if (texID == 999)
+  if (loadedTex)
   {
-      glGenTextures(1, &texID);
+      glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, data);
+      return texID;
   }
 
+  glGenTextures(1, &texID);
   glBindTexture(GL_TEXTURE_2D, texID);
   glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, w, h);
   glTexSubImage2D(GL_TEXTURE_2D,0,0,0,w,h,GL_RGBA,GL_UNSIGNED_BYTE,data);
@@ -20,6 +23,8 @@ int NoiseTex::storeTex( GLubyte * data, int w, int h ) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+  loadedTex = true;
 
   return  texID;
 }

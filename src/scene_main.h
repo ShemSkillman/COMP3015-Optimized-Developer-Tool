@@ -17,9 +17,9 @@ private:
     GLSLProgram waveProg, waveNoiseProg, basicProg;
 
     float angle, tPrev, rotSpeed;
-    float time;
+    float time, currentFreq;
 
-    void setMatrices();
+    void setMatrices(GLSLProgram& prog);
     void compile();
 
     std::unique_ptr<ObjMesh> planeObj;

@@ -38,36 +38,32 @@ void Scene_Main::initScene()
 
 	waveProg.use();
 
-	waveProg.setUniform("EdgeWidth", 0.005f);
 	waveProg.setUniform("PctExtend", 0.1f);
-	waveProg.setUniform("LineColor", vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	waveProg.setUniform("Light.Position", vec4(10.0f, 10.0f, 10.0f, 1.0f));
 	waveProg.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
 
 	basicProg.use();
 
-	basicProg.setUniform("EdgeWidth", 0.005f);
 	basicProg.setUniform("PctExtend", 0.1f);
-	basicProg.setUniform("LineColor", vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	basicProg.setUniform("Light.Position", vec4(10.0f, 10.0f, 10.0f, 1.0f));
 	basicProg.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
 
 	waveNoiseProg.use();
 
-	waveNoiseProg.setUniform("EdgeWidth", 0.005f);
 	waveNoiseProg.setUniform("PctExtend", 0.1f);
-	waveNoiseProg.setUniform("LineColor", vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	waveNoiseProg.setUniform("Light.Position", vec4(10.0f, 10.0f, 10.0f, 1.0f));
 	waveNoiseProg.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
 
-	GLuint noiseTex = NoiseTex::generatePeriodic2DTex(uiHandler.GetFrequency(), 0.5f, 100, 100);
+	GLuint noiseTex = NoiseTex::generatePeriodic2DTex(uiHandler.GetWaveConfig().frequency, 0.5f, 100, 100);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, noiseTex);
 
 	waveNoiseProg.setUniform("NoiseTex", 0);
+
+	currentFreq = uiHandler.GetWaveConfig().frequency;
 }
 
 void Scene_Main::compile()
@@ -98,25 +94,24 @@ void Scene_Main::update(float t)
 {
 	view = Camera::getCamera().getView();
 
-	static float freq;
-	if (freq != uiHandler.GetFrequency() && uiHandler.GetUseNoise())
+	if (currentFreq != uiHandler.GetWaveConfig().frequency && uiHandler.GetWaveConfig().useNoise)
 	{
-		freq = uiHandler.GetFrequency();
-
-		initScene();
-
-		return;
+		currentFreq = uiHandler.GetWaveConfig().frequency;
+		GLuint noiseTex = NoiseTex::generatePeriodic2DTex(uiHandler.GetWaveConfig().frequency, 0.5f, 100, 100);
 	}
 
 	time = t;
 
 	waveProg.use();
 
-	waveProg.setUniform("Freq", uiHandler.GetFrequency());
-	waveProg.setUniform("Velocity", uiHandler.GetVelocity());
-	waveProg.setUniform("Amp", uiHandler.GetAmplitude());
+	waveProg.setUniform("Freq", uiHandler.GetWaveConfig().frequency);
+	waveProg.setUniform("Velocity", uiHandler.GetWaveConfig().velocity);
+	waveProg.setUniform("Amp", uiHandler.GetWaveConfig().amplitude);
 
-	vec3 color = uiHandler.GetWaveColor();
+	waveProg.setUniform("LineColor", vec4(uiHandler.GetWaveConfig().lineColor, 1.0f));
+	waveProg.setUniform("EdgeWidth", uiHandler.GetWaveConfig().lineThickness);
+
+	vec3 color = uiHandler.GetWaveConfig().waveColor;
 	waveProg.setUniform("Material.Kd", color * 0.6f);
 	waveProg.setUniform("Material.Ka", color);
 
@@ -124,41 +119,64 @@ void Scene_Main::update(float t)
 
 	basicProg.use();
 
-	vec3 shipColor = vec3(0.8f, 0.6f, 0.2f);
+	vec3 shipColor = uiHandler.getShipConfig().shipColor;
 	basicProg.setUniform("Material.Kd", shipColor * 0.6f);
 	basicProg.setUniform("Material.Ka", shipColor);
+
+	basicProg.setUniform("LineColor", vec4(uiHandler.getShipConfig().lineColor, 1.0f));
+	basicProg.setUniform("EdgeWidth", uiHandler.getShipConfig().lineThickness);
 
 	waveNoiseProg.use();
 
 	waveNoiseProg.setUniform("Material.Kd", color * 0.6f);
 	waveNoiseProg.setUniform("Material.Ka", color);
 
-	waveNoiseProg.setUniform("Freq", uiHandler.GetFrequency());
-	waveNoiseProg.setUniform("Velocity", uiHandler.GetVelocity());
-	waveNoiseProg.setUniform("Amp", uiHandler.GetAmplitude());
+	waveNoiseProg.setUniform("LineColor", vec4(uiHandler.GetWaveConfig().lineColor, 1.0f));
+	waveNoiseProg.setUniform("EdgeWidth", uiHandler.GetWaveConfig().lineThickness);
 
-	waveNoiseProg.setUniform("Time", time);
+	waveNoiseProg.setUniform("Freq", uiHandler.GetWaveConfig().frequency);
+	waveNoiseProg.setUniform("Velocity", uiHandler.GetWaveConfig().velocity);
+	waveNoiseProg.setUniform("Amp", uiHandler.GetWaveConfig().amplitude);
 
-	model = mat4(1.0f);
-	setMatrices();
-
-	if (uiHandler.GetUseNoise())
-	{
-		waveNoiseProg.use();
-	}
-	else
-	{
-		waveProg.use();
-	}
+	waveNoiseProg.setUniform("Time", time);	
 }
 
 void Scene_Main::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 
+	model = mat4(1.0f);
+
+	if (uiHandler.GetWaveConfig().useNoise)
+	{
+		model = glm::translate(model, vec3(0.0f, -0.5f * uiHandler.GetWaveConfig().amplitude, 0.0f));
+		setMatrices(waveNoiseProg);
+	}
+	else
+	{
+		setMatrices(waveProg);
+	}
+
 	planeObj->render();
 
-	basicProg.use();
+	ShipConfig shipConfig = uiHandler.getShipConfig();
+
+	model = mat4(1.0f);
+
+	float sinValue = sin(time * shipConfig.moveSpeed);
+	float cosValue = cos(time * shipConfig.moveSpeed);
+
+	float bob = (shipConfig.bobHeight * (shipConfig.invertBob ? sinValue : cosValue));
+	model = glm::translate(model, vec3(0.0f, bob, 0.0f));
+
+	model = glm::rotate(model, shipConfig.rotY * (shipConfig.invertRotY ? sinValue : cosValue), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	model = glm::rotate(model, shipConfig.rotX * (shipConfig.invertRotX ? sinValue : cosValue), glm::vec3(1.0f, 0.0f, 0.0f));
+
+	model = glm::rotate(model, shipConfig.rotZ * (shipConfig.invertRotZ ? sinValue : cosValue), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	setMatrices(basicProg);
+
 	ship->render();
 
 	glFinish();
@@ -173,24 +191,13 @@ void Scene_Main::resize(int w, int h)
 	projection = glm::perspective(glm::radians(60.0f), (float)width / height, 0.3f, 100.0f);
 }
 
-void Scene_Main::setMatrices()
+void Scene_Main::setMatrices(GLSLProgram& prog)
 {
 	mat4 mv = view * model;
-	waveProg.use();
-	waveProg.setUniform("ModelViewMatrix", mv);
-	waveProg.setUniform("NormalMatrix",
-		glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
-	waveProg.setUniform("MVP", projection * mv);
 
-	basicProg.use();
-	basicProg.setUniform("ModelViewMatrix", mv);
-	basicProg.setUniform("NormalMatrix",
+	prog.use();
+	prog.setUniform("ModelViewMatrix", mv);
+	prog.setUniform("NormalMatrix",
 		glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
-	basicProg.setUniform("MVP", projection * mv);
-
-	waveNoiseProg.use();
-	waveNoiseProg.setUniform("ModelViewMatrix", mv);
-	waveNoiseProg.setUniform("NormalMatrix",
-		glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
-	waveNoiseProg.setUniform("MVP", projection * mv);
+	prog.setUniform("MVP", projection * mv);
 }

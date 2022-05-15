@@ -2,7 +2,6 @@
 
 layout (location = 0) in vec3 VertexPosition;
 layout (location = 1) in vec3 VertexNormal;
-layout (location = 2) in vec2 TexCoords;
 
 out vec3 VNormal;
 out vec3 VPosition;
@@ -13,7 +12,7 @@ uniform mat4 MVP;
 
 void main()
 {
-	VNormal = normalize(NormalMatrix * VNormal);
+	VNormal = normalize(NormalMatrix * VertexNormal);
 	VPosition = vec3(ModelViewMatrix * vec4(VertexPosition, 1.0f));
 
 	// The position in clip coords
