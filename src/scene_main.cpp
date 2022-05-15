@@ -44,6 +44,14 @@ void Scene_Main::initScene()
 
 	waveNoiseProg.use();
 	waveNoiseProg.setUniform("PctExtend", 0.1f);
+
+	currentFreq = uiHandler.GetWaveConfig().frequency;
+	GLuint noiseTex = NoiseTex::generatePeriodic2DTex(uiHandler.GetWaveConfig().frequency, 0.5f, 100, 100);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, noiseTex);
+
+	waveNoiseProg.setUniform("NoiseTex", 0);
 }
 
 void Scene_Main::compile()
@@ -79,11 +87,6 @@ void Scene_Main::update(float t)
 	{
 		currentFreq = uiHandler.GetWaveConfig().frequency;
 		GLuint noiseTex = NoiseTex::generatePeriodic2DTex(uiHandler.GetWaveConfig().frequency, 0.5f, 100, 100);
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, noiseTex);
-
-		waveNoiseProg.setUniform("NoiseTex", 0);
 	}
 
 	time = t;

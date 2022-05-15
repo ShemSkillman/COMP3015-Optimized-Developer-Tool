@@ -5,7 +5,7 @@
 int main(int argc, char* argv[])
 {
 	UIHandler uiHandler;
-	SceneRunner runner("Shader_Basics", uiHandler);
+	SceneRunner runner("Ocean Waves Generator Tool", uiHandler);
 
 	std::unique_ptr<Scene> scene;
 
