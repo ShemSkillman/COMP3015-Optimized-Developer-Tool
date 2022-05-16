@@ -62,7 +62,7 @@ Light settings:
 
 [GitHub Repository Link](https://github.com/ShemSkillman/COMP3015-Optimized-Developer-Tool)
 
-[Video Link]()
+[Developer Walkthrough Video Link](https://youtu.be/vQPV0KZxXwI)
 
 ### Overview
 
@@ -74,11 +74,29 @@ Although the noise map is generated on startup, changing the wave frequency whil
 
 There are three shader programs used: a wave animation shader that uses noise, another wave animation shader that doesn't use noise, and a basic shader that does not produce waves. All these shader programs apply silhouette lines and a toon effect so they share the same fragment and geometry shaders.
 
+For an in depth explaination on how the sihlouette lines are processed for rendering, please watch the developer walkthrough video.
+
 ### Regular Wave Animation Program
+
+The 'waveProg' program is used to manipulate the vertices of the plane to produce waves of a consistent pattern.
+
+In the wave animation vertex shader, the frequency determines how wide each wave is so that we can calculate how high a particular vertex needs to be positioned. A sin function is used to create the peaks and troughs in both the x and z directions. Since the pattern is consistent, the cos function is also used to calculate the normal of the wave slope.
+
+The manipulated normal and vertex information is then passed on down the pipeline as normal so that silhouette lines can be applied. 
 
 ### Noise Wave Animation Program
 
+The 'waveNoiseProg' is slightly different to 'waveProg' because the compiled noise vertex shader uses noise values from a noise map rather than using sin values.
+
+In the scene, a noise map is generated in the form of a texture, and this texture is accessible from the noise vertex shader. The noise value for a particular vertex can be extracted and used to determine the height of the wave at this point. These noise values ensure that the waves generated are random in nature and do not follow a consistent pattern.
+
+Although, it is worth mentioning that the noise texture is limited in size so the noise map will have to repeat itself eventually. The noise map will need to be regenerated when the frequency is changed.
+
+The normals are also calculated slightly differently to use completely random noise values. This gives a 'warped' effect to mimic the refraction of light in water and it couples well with the cartoon-style look of the scene.
+
 ### Basic Program
+
+The 'basicProg' does not use a wave animation vertex shader but it still applies the silhouette lines similar to the other 2 shader programs. This is used when rendering the ship.
 
 ## Background
 
@@ -93,6 +111,6 @@ SHIP.obj in the media folder was downloaded from [GrabCad](https://grabcad.com/l
 I am using the [imgui library](https://github.com/ocornut/imgui) v 1.86 to render UI.
 
 Online Help:
- - [Implementing the orbital camera functionality](https://learnopengl.com/Getting-started/Camera)
- - [Using noise to generate waves](https://stackoverflow.com/questions/30397320/opengl-water-waves-with-noise)
- - [Importing imgui library](https://www.youtube.com/watch?v=S6ueaaN-Z2w)
+ - I used the [LearnOpenGL camera guide](https://learnopengl.com/Getting-started/Camera) to implement the orbital camera for looking around the scene.
+ - This [StackOverflow solution](https://stackoverflow.com/questions/30397320/opengl-water-waves-with-noise) helped me to animate the noise waves.
+ - The imgui library was imported into the project with the help of this [YouTube tutorial](https://www.youtube.com/watch?v=S6ueaaN-Z2w).
