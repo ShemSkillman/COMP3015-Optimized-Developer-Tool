@@ -1,9 +1,5 @@
 # Ocean Waves Generator Tool by Shem Skillman
 
-[GitHub Repository Link](https://github.com/ShemSkillman/COMP3015-Optimized-Developer-Tool)
-
-[Code Walkthrough Video Link]()
-
 ![](regular_wave.gif)
 ![](noise_wave.gif)
 
@@ -61,6 +57,28 @@ Light settings:
   * Ship color - the paint job of the ship.
   * Ship line color - color of the silhouette lines on the ship.
   * Ship line thickness - thickness of the silhouette lines on the ship.
+
+## Code Walkthrough
+
+[GitHub Repository Link](https://github.com/ShemSkillman/COMP3015-Optimized-Developer-Tool)
+
+[Video Link]()
+
+### Overview
+
+To begin with, the ship model and ocean plane are loaded into the scene and the noise texture is generated. 
+
+All the information collected from the console each frame is stored inside the UI Manager class which can then accessed by the scene to perform matrix manipulation and to change uniforms in the shaders. Majority of matrix manipulation is altering the rotation and position of the ship using cos and sin to perform smooth looping animations. The values sent to the shaders on the other hand determine how waves are generated and the visual look in terms of lighting and colour.
+
+Although the noise map is generated on startup, changing the wave frequency whilst noise is enabled requires a new noise map to be generated so that the new frequency value is used.
+
+There are three shader programs used: a wave animation shader that uses noise, another wave animation shader that doesn't use noise, and a basic shader that does not produce waves. All these shader programs apply silhouette lines and a toon effect so they share the same fragment and geometry shaders.
+
+### Regular Wave Animation Program
+
+### Noise Wave Animation Program
+
+### Basic Program
 
 ## Background
 

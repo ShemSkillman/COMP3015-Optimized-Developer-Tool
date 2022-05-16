@@ -15,6 +15,5 @@ void main()
 	VNormal = normalize(NormalMatrix * VertexNormal);
 	VPosition = vec3(ModelViewMatrix * vec4(VertexPosition, 1.0f));
 
-	// The position in clip coords
 	gl_Position = MVP * vec4(VertexPosition, 1.0f);
 }
